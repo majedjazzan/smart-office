@@ -7,11 +7,11 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import SolarConsult from "./components/SolarConsult";
 // صفحات الخدمات
-import Solar from "./pages/Solar";
-import Starlink from "./pages/Starlink";
-import Camera from "./pages/Camera";
-import Software from "./pages/Software";
-import Surveillance from "./pages/Surveillance";
+import Solar from "./Pages/Solar";
+import Starlink from "./Pages/Starlink";
+import Camera from "./Pages/Camera";
+import Software from "./Pages/Software";
+import Surveillance from "./Pages/Surveillance";
 
 function App() {
   return (
