@@ -28,7 +28,7 @@ function Contact() {
                   href="mailto:enghashem06@gmail.com"
                   className="hover:text-blue-500 transition"
                 >
-                  enghashem06@gmail.com
+                  smartofficesmof@gmail.com
                 </a>
               </div>
 
