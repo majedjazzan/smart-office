@@ -1,75 +1,121 @@
+import { motion } from "framer-motion";
 import { FaWhatsapp, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import logo from "../assets/smart-office-logo.png";
+import Reveal, { stagger, item } from "./Reveal";
 
 function Footer() {
+  const links = [
+    { href: "#home", label: "Home" },
+    { href: "#services", label: "Services" },
+    { href: "#contact", label: "Contact" },
+  ];
+
+  const contacts = [
+    {
+      icon: <FaEnvelope className="text-aqua" />,
+      text: "smartofficesmof@gmail.com",
+    },
+    {
+      icon: <FaWhatsapp className="text-green-400" />,
+      text: "+963 937 192 778",
+    },
+    { icon: <FaPhoneAlt className="text-steel" />, text: "+963 5274 5274" },
+  ];
+
   return (
     <footer className="relative bg-gradient-to-b from-navy to-[#08101f] text-white pt-20 pb-8 overflow-hidden">
-      {/* Glow background */}
-      <div className="absolute top-0 left-0 w-72 h-72 bg-aqua/20 blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-0 right-0 w-72 h-72 bg-steel/20 blur-[120px] rounded-full"></div>
+      {/* Glow background — حركة بطيئة جداً، إحساس عمق بدون لفت انتباه */}
+      <motion.div
+        className="absolute top-0 left-0 w-72 h-72 bg-aqua/20 blur-[120px] rounded-full"
+        animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-0 right-0 w-72 h-72 bg-steel/20 blur-[120px] rounded-full"
+        animate={{ x: [0, -30, 0], y: [0, -20, 0] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       <div className="relative max-w-7xl mx-auto px-8 grid md:grid-cols-3 gap-12">
         {/* Logo + About */}
-        <div>
-          <img
-            src={logo}
-            alt="Smart Office"
-            className="w-36 mb-5 object-contain"
-          />
+        <Reveal>
+          <div>
+            <motion.img
+              src={logo}
+              alt="Smart Office"
+              whileHover={{ scale: 1.06 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="w-36 mb-5 object-contain"
+            />
 
-          <p className="text-white/70 leading-relaxed">
-            Smart Office provides intelligent engineering solutions in solar
-            energy, surveillance systems, Starlink internet, and software
-            development.
-          </p>
-        </div>
+            <p className="text-white/70 leading-relaxed">
+              Smart Office provides intelligent engineering solutions in solar
+              energy, surveillance systems, Starlink internet, and software
+              development.
+            </p>
+          </div>
+        </Reveal>
 
         {/* Quick Links */}
-        <div>
-          <h3 className="text-xl font-semibold mb-5">Quick Links</h3>
+        <Reveal delay={0.1}>
+          <div>
+            <h3 className="text-xl font-semibold mb-5">Quick Links</h3>
 
-          <div className="flex flex-col gap-3 text-white/70">
-            <a href="#home" className="hover:text-aqua transition">
-              Home
-            </a>
-
-            <a href="#services" className="hover:text-aqua transition">
-              Services
-            </a>
-
-            <a href="#contact" className="hover:text-aqua transition">
-              Contact
-            </a>
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.4 }}
+              className="flex flex-col gap-3 text-white/70"
+            >
+              {links.map((link) => (
+                <motion.a
+                  key={link.href}
+                  href={link.href}
+                  variants={item}
+                  whileHover={{ x: -4 }}
+                  className="hover:text-aqua transition w-fit"
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+            </motion.div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Contact */}
-        <div>
-          <h3 className="text-xl font-semibold mb-5">Contact</h3>
+        <Reveal delay={0.2}>
+          <div>
+            <h3 className="text-xl font-semibold mb-5">Contact</h3>
 
-          <div className="space-y-4 text-white/70">
-            <div className="flex items-center gap-3">
-              <FaEnvelope className="text-aqua" />
-              <span>smartofficesmof@gmail.com</span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <FaWhatsapp className="text-green-400" />
-              <span>+963 937 192 778</span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <FaPhoneAlt className="text-steel" />
-              <span>+963 5274 5274</span>
-            </div>
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.4 }}
+              className="space-y-4 text-white/70"
+            >
+              {contacts.map((c, i) => (
+                <motion.div
+                  key={i}
+                  variants={item}
+                  className="flex items-center gap-3"
+                >
+                  {c.icon}
+                  <span>{c.text}</span>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Bottom line */}
-      <div className="relative border-t border-white/10 mt-14 pt-6 text-center text-white/50 text-sm">
-        © {new Date().getFullYear()} Smart Office. All rights reserved.
-      </div>
+      <Reveal delay={0.15}>
+        <div className="relative border-t border-white/10 mt-14 pt-6 text-center text-white/50 text-sm">
+          © {new Date().getFullYear()} Smart Office. All rights reserved.
+        </div>
+      </Reveal>
     </footer>
   );
 }
