@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { FaWhatsapp, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import logo from "../assets/smart-office-logo.png";
 import Reveal, { stagger, item } from "./Reveal";
 
 function Footer() {
   const links = [
-    { href: "#home", label: "Home" },
-    { href: "#services", label: "Services" },
-    { href: "#contact", label: "Contact" },
+    { to: "/", label: "Home" },
+    { to: "/services", label: "Services" },
+    { to: "/contact", label: "Contact" },
   ];
 
   const contacts = [
@@ -69,15 +70,17 @@ function Footer() {
               className="flex flex-col gap-3 text-white/70"
             >
               {links.map((link) => (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  variants={item}
-                  whileHover={{ x: -4 }}
-                  className="hover:text-aqua transition w-fit"
-                >
-                  {link.label}
-                </motion.a>
+                <motion.div key={link.to} variants={item} className="w-fit">
+                  <Link
+                    to={link.to}
+                    className="hover:text-aqua transition inline-block"
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    }
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
               ))}
             </motion.div>
           </div>

@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   motion,
   useScroll,
@@ -10,11 +11,7 @@ import heroImage from "../assets/hero-ai-energy.png";
 function Hero() {
   const ref = useRef(null);
   const reduce = useReducedMotion();
-
-  const scrollToSection = (id) => {
-    const section = document.getElementById(id);
-    section?.scrollIntoView({ behavior: "smooth" });
-  };
+  const navigate = useNavigate();
 
   // Parallax: الصورة تتحرك أبطأ من الصفحة، والنص يخف تدريجياً وانت نازل
   const { scrollYProgress } = useScroll({
@@ -78,8 +75,8 @@ function Hero() {
           <motion.div
             className="absolute rounded-full bg-cyan-300"
             style={{
-              left: "83%",
-              top: "27%",
+              left: "78%",
+              top: "41%",
               width: 18,
               height: 18,
               filter: "blur(3px)",
@@ -92,7 +89,7 @@ function Hero() {
             className="absolute rounded-full bg-cyan-300"
             style={{
               left: "88%",
-              top: "26%",
+              top: "31%",
               width: 16,
               height: 16,
               filter: "blur(3px)",
@@ -107,7 +104,33 @@ function Hero() {
             }}
           />
 
-          {/* ٢) إضاءة تغطي كامل منطقة الألواح الشمسية — يسار/أسفل الصورة */}
+          {/* شعاع ضوء ناعم يعبر الشاشة كاملة (الألواح + الروبوت) بدون أي قص — يظهر ويتلاشى تدريجياً */}
+          <motion.div
+            className="absolute"
+            style={{
+              left: "-25%",
+              top: "-40%",
+              width: "16%",
+              height: "200%",
+              background:
+                "linear-gradient(90deg, transparent, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.55) 55%, transparent)",
+              transform: "rotate(-18deg)",
+              filter: "blur(4px)",
+              mixBlendMode: "overlay",
+            }}
+            animate={{
+              left: ["-25%", "50%", "125%"],
+              opacity: [0, 0.65, 0],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatDelay: 3,
+            }}
+          />
+
+          {/* نقاط لمعان موزعة على منطقة الألواح فقط (تبقى محصورة، عكس الشعاع) */}
           <div
             className="absolute overflow-hidden"
             style={{
@@ -118,23 +141,6 @@ function Hero() {
               height: "100%",
             }}
           >
-            {/* موجة ضوء تعبر الألواح بشكل مستمر */}
-            <motion.div
-              className="absolute h-full w-1/3"
-              style={{
-                background:
-                  "linear-gradient(100deg, transparent, rgba(255,255,255,0.55), transparent)",
-              }}
-              animate={{ left: ["-40%", "120%"] }}
-              transition={{
-                duration: 3.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                repeatDelay: 1.2,
-              }}
-            />
-
-            {/* نقاط لمعان موزعة على كل الألواح */}
             {panelGlints.map((p, i) => (
               <motion.span
                 key={i}
@@ -200,15 +206,38 @@ function Hero() {
         className="relative z-10 text-center px-6 max-w-4xl"
       >
         {/* العنوان */}
-        <motion.h1
-          variants={line}
-          className="text-5xl md:text-8xl font-extrabold
+        <div className="relative inline-block">
+          {/* توهج نابض خلف النص — نفس لون توهج عيون الروبوت */}
+          {!reduce && (
+            <motion.div
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none select-none"
+              animate={{ opacity: [0.35, 0.75, 0.35] }}
+              transition={{
+                duration: 3.2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <span
+                className="text-5xl md:text-8xl font-extrabold tracking-tight text-cyan-300"
+                style={{ filter: "blur(26px)" }}
+              >
+                Smart Office
+              </span>
+            </motion.div>
+          )}
+
+          <motion.h1
+            variants={line}
+            className="text-5xl md:text-8xl font-extrabold
   text-[#0A2540] dark:text-white
   drop-shadow-[0_10px_30px_rgba(0,0,0,0.25)]
   tracking-tight"
-        >
-          Smart Office
-        </motion.h1>
+          >
+            Smart Office
+          </motion.h1>
+        </div>
 
         {/* الوصف */}
         <motion.p
@@ -226,7 +255,7 @@ function Hero() {
           className="mt-12 flex justify-center gap-5 flex-wrap"
         >
           <motion.button
-            onClick={() => scrollToSection("services")}
+            onClick={() => navigate("/services")}
             whileHover={reduce ? {} : { scale: 1.06, y: -2 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -238,7 +267,7 @@ function Hero() {
           </motion.button>
 
           <motion.button
-            onClick={() => scrollToSection("contact")}
+            onClick={() => navigate("/contact")}
             whileHover={reduce ? {} : { scale: 1.06, y: -2 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}

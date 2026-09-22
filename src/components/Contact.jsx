@@ -1,49 +1,39 @@
 import { motion } from "framer-motion";
-import {
-  FaWhatsapp,
-  FaPhoneAlt,
-  FaEnvelope,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+import { MessageCircle, Phone, Mail, MapPin, Clock } from "lucide-react";
 import Reveal, { stagger, item } from "./Reveal";
+import ContactForm from "./ContactForm";
 
 function Contact() {
-  const rows = [
+  const quickContacts = [
     {
-      icon: <FaEnvelope className="text-blue-500 text-xl" />,
-      content: (
-        <a
-          href="mailto:smartofficesmof@gmail.com"
-          className="hover:text-blue-500 transition"
-        >
-          smartofficesmof@gmail.com
-        </a>
-      ),
+      icon: <MessageCircle size={26} className="text-white" />,
+      label: "واتساب",
+      value: "+963 937 192 778",
+      href: "https://wa.me/963937192778",
+      color: "from-green-500 to-green-600",
     },
     {
-      icon: <FaMapMarkerAlt className="text-red-500 text-xl" />,
-      content: <p>Aljarmaqani Tower, 5th Floor, Office No. 4</p>,
+      icon: <Phone size={26} className="text-white" />,
+      label: "اتصال مباشر",
+      value: "+963 5274 5274",
+      href: "tel:+96352745274",
+      color: "from-steel to-navy",
     },
     {
-      icon: <FaWhatsapp className="text-green-500 text-2xl" />,
-      content: (
-        <a
-          href="https://wa.me/963937192778"
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-green-500 transition font-medium"
-        >
-          +963 937 192 778
-        </a>
-      ),
+      icon: <Mail size={26} className="text-white" />,
+      label: "البريد الإلكتروني",
+      value: "smartofficesmof@gmail.com",
+      href: "mailto:smartofficesmof@gmail.com",
+      color: "from-blue-500 to-blue-600",
     },
     {
-      icon: <FaPhoneAlt className="text-steel text-xl" />,
-      content: (
-        <a href="tel:+96352745274" className="hover:text-steel transition">
-          +963 5274 5274
-        </a>
-      ),
+      icon: <MapPin size={26} className="text-white" />,
+      label: "الموقع",
+      value: "Aljarmaqani Tower, 5th Floor",
+      href: "https://www.google.com/maps?q=32.711396112660466,36.56790067775972",
+      color: "from-red-500 to-red-600",
+      external: true,
     },
   ];
 
@@ -51,10 +41,10 @@ function Contact() {
     <>
       <section
         id="contact"
-        className="py-28 bg-gradient-to-b from-white to-blue-50 dark:from-[#0B1120] dark:to-[#111827]"
+        className="pt-40 pb-28 bg-gradient-to-b from-white to-blue-50 dark:from-[#0B1120] dark:to-[#111827]"
       >
         {/* Title */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-14 px-6">
           <Reveal>
             <h2 className="text-5xl font-bold text-navy dark:text-white">
               Contact Us
@@ -67,45 +57,74 @@ function Contact() {
           </Reveal>
         </div>
 
+        {/* ساعات العمل */}
+        <Reveal delay={0.1}>
+          <div className="max-w-3xl mx-auto px-6 mb-16">
+            <div
+              className="flex items-center justify-center gap-3 rounded-2xl bg-navy/5 dark:bg-white/5
+              border border-navy/10 dark:border-white/10 px-6 py-4 text-center"
+            >
+              <Clock size={20} className="text-aqua shrink-0" />
+              <p className="text-navy dark:text-white font-semibold">
+                السبت - الخميس: 24 ساعة عمل
+                <span className="text-gray-500 dark:text-gray-400 font-normal">
+                  {" "}
+                  · الجمعة: إجازة
+                </span>
+              </p>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Quick Contact Cards */}
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-6 px-6 mb-16"
+        >
+          {quickContacts.map((c, i) => (
+            <motion.a
+              key={i}
+              variants={item}
+              href={c.href}
+              target={
+                c.external || c.href.startsWith("http") ? "_blank" : undefined
+              }
+              rel="noreferrer"
+              whileHover={{ y: -6 }}
+              className="bg-white dark:bg-white/5 rounded-2xl p-6 border border-gray-100
+              dark:border-white/10 shadow-md hover:shadow-xl transition text-center"
+            >
+              <div
+                className={`w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${c.color}
+                flex items-center justify-center shadow-lg`}
+              >
+                {c.icon}
+              </div>
+              <h4 className="font-bold text-navy dark:text-white mb-1">
+                {c.label}
+              </h4>
+              <p className="text-sm text-gray-500 dark:text-gray-300 break-words">
+                {c.value}
+              </p>
+            </motion.a>
+          ))}
+        </motion.div>
+
+        {/* Form + Map */}
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 px-6">
-          {/* Contact Info */}
+          {/* Contact Form */}
           <Reveal from="right">
             <div
               className="bg-white/90 dark:bg-white/5 backdrop-blur-xl p-10 rounded-3xl
-              shadow-xl border border-gray-100 dark:border-white/10 text-right h-full"
+              shadow-xl border border-gray-100 dark:border-white/10 h-full"
             >
-              <h3 className="text-2xl font-bold text-navy dark:text-white mb-8">
-                Contact Information
+              <h3 className="text-2xl font-bold text-navy dark:text-white mb-8 text-right">
+                أرسل طلبك مباشرة
               </h3>
-
-              <motion.div
-                variants={stagger}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
-                className="space-y-7 text-gray-700 dark:text-gray-300"
-              >
-                {rows.map((row, i) => (
-                  <motion.div
-                    key={i}
-                    variants={item}
-                    className="flex items-center gap-4 justify-end group"
-                  >
-                    <motion.span
-                      whileHover={{ scale: 1.18 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 15,
-                      }}
-                      className="flex items-center justify-center"
-                    >
-                      {row.icon}
-                    </motion.span>
-                    {row.content}
-                  </motion.div>
-                ))}
-              </motion.div>
+              <ContactForm />
             </div>
           </Reveal>
 

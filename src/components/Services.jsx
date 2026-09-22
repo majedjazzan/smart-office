@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Check } from "lucide-react";
 import solar from "../assets/solar.png";
 import starlink from "../assets/starlink.png";
 import camera from "../assets/camera.png";
 import software from "../assets/software.png";
 import Reveal from "./Reveal";
+import ProcessSteps from "./ProcessSteps";
 import useScrollDirection from "../hooks/useScrollDirection";
 
 function Services() {
@@ -16,6 +18,11 @@ function Services() {
       desc: "Smart solar solutions with advanced engineering systems.",
       img: solar,
       border: "border-steel",
+      features: [
+        "ألواح عالية الكفاءة",
+        "ضمان يصل لـ 10 سنوات",
+        "صيانة دورية مجدولة",
+      ],
       buttons: [
         { text: "طلب استشارة", link: "/solar-consult" },
         { text: "تنفيذ", link: "/solar" },
@@ -26,6 +33,11 @@ function Services() {
       desc: "Fast and stable satellite internet solutions.",
       img: starlink,
       border: "border-aqua",
+      features: [
+        "سرعة عالية بأي موقع",
+        "تركيب وتفعيل سريع",
+        "استقرار بدون انقطاع",
+      ],
       buttons: [{ text: "أنواع الخدمات", link: "/starlink" }],
     },
     {
@@ -33,6 +45,11 @@ function Services() {
       desc: "Modern security cameras and alarm systems.",
       img: camera,
       border: "border-navy",
+      features: [
+        "كاميرات دقة عالية",
+        "مراقبة عن بعد بالجوال",
+        "إنذار فوري عند الحركة",
+      ],
       buttons: [{ text: "اختر النظام", link: "/camera" }],
     },
     {
@@ -40,6 +57,11 @@ function Services() {
       desc: "Integrated digital systems for smart businesses.",
       img: software,
       border: "border-steel",
+      features: [
+        "أنظمة مخصصة لاحتياجك",
+        "لوحة تحكم سهلة الاستخدام",
+        "دعم فني بعد التسليم",
+      ],
       buttons: [{ text: "اطلب نظام", link: "/software" }],
     },
   ];
@@ -50,9 +72,9 @@ function Services() {
   return (
     <section
       id="services"
-      className="py-28 bg-gradient-to-b from-white to-blue-50 dark:from-[#0B1120] dark:to-[#111827]"
+      className="pt-40 pb-20 bg-gradient-to-b from-white to-blue-50 dark:from-[#0B1120] dark:to-[#111827]"
     >
-      <div className="text-center mb-20">
+      <div className="text-center mb-20 px-6">
         <Reveal>
           <h2 className="text-5xl font-bold text-navy dark:text-white">
             Our Services
@@ -98,6 +120,19 @@ function Services() {
               <p className="mt-3 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                 {service.desc}
               </p>
+
+              {/* نقاط سريعة عن الخدمة */}
+              <ul className="mt-5 space-y-2">
+                {service.features.map((f, idx) => (
+                  <li
+                    key={idx}
+                    className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+                  >
+                    <Check size={16} className="text-aqua shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div
@@ -118,6 +153,25 @@ function Services() {
           </motion.div>
         ))}
       </div>
+
+      {/* خطوات العمل */}
+      <ProcessSteps />
+
+      {/* CTA نهائي */}
+      <Reveal>
+        <div className="text-center mt-4 px-6">
+          <p className="text-gray-500 dark:text-gray-300 mb-6 text-lg">
+            ما الخدمة المناسبة لك؟ تواصل معنا ونساعدك تختار
+          </p>
+          <Link
+            to="/contact"
+            className="inline-block px-10 py-4 rounded-full bg-gradient-to-r from-steel to-aqua
+            text-white font-semibold shadow-xl hover:scale-105 transition"
+          >
+            تواصل معنا الآن
+          </Link>
+        </div>
+      </Reveal>
     </section>
   );
 }

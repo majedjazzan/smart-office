@@ -8,7 +8,6 @@ function Navbar({ darkMode, setDarkMode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [active, setActive] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,50 +23,17 @@ function Navbar({ darkMode, setDarkMode }) {
     return () => window.removeEventListener("scroll", controlNavbar);
   }, [lastScrollY]);
 
-  // معرفة السكشن الحالي
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["home", "services", "contact"];
-
-      sections.forEach((id) => {
-        const section = document.getElementById(id);
-
-        if (section) {
-          const top = section.offsetTop - 150;
-          const bottom = top + section.offsetHeight;
-
-          if (window.scrollY >= top && window.scrollY < bottom) {
-            setActive(id);
-          }
-        }
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Scroll smooth
-  const scrollToSection = (id) => {
+  // كل صفحة الآن مستقلة براوت خاص، فالتنقل بيصير بالراوتر مباشرة
+  const goTo = (path) => {
     setMenuOpen(false);
-
-    if (location.pathname !== "/") {
-      navigate("/");
-
-      setTimeout(() => {
-        const section = document.getElementById(id);
-        section?.scrollIntoView({ behavior: "smooth" });
-      }, 300);
-    } else {
-      const section = document.getElementById(id);
-      section?.scrollIntoView({ behavior: "smooth" });
-    }
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const navItems = [
-    { id: "home", label: "Home" },
-    { id: "services", label: "Services" },
-    { id: "contact", label: "Contact" },
+    { path: "/", label: "Home" },
+    { path: "/services", label: "Services" },
+    { path: "/contact", label: "Contact" },
   ];
 
   return (
@@ -76,39 +42,42 @@ function Navbar({ darkMode, setDarkMode }) {
       ${showNavbar ? "translate-y-0" : "-translate-y-full"}
       backdrop-blur-xl bg-white/70 dark:bg-[#0B1120]/70 border-b border-white/10 shadow-lg`}
     >
-      <div className="max-w-7xl mx-auto px-8 flex justify-between items-center h-28">
+      <div className="max-w-7xl mx-auto px-8 flex justify-between items-center h-20 md:h-28">
         {/* LOGO */}
         <div
           className="flex items-center cursor-pointer"
-          onClick={() => scrollToSection("home")}
+          onClick={() => goTo("/")}
         >
           <img
             src={logo}
             alt="Smart Office"
-            className="w-64 h-64 object-contain drop-shadow-2xl hover:scale-105 transition duration-300"
+            className="w-32 h-32 md:w-44 md:h-44 lg:w-64 lg:h-64 object-contain drop-shadow-2xl hover:scale-105 transition duration-300"
           />
         </div>
 
         {/* DESKTOP MENU */}
         <div className="hidden md:flex items-center gap-12 text-navy dark:text-white text-lg font-semibold">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              className={`relative capitalize transition duration-300 pb-1 ${
-                active === item.id ? "text-aqua" : "hover:text-aqua"
-              }`}
-            >
-              {item.label}
-              {active === item.id && (
-                <motion.span
-                  layoutId="nav-underline"
-                  className="absolute left-0 bottom-0 h-[2px] w-full bg-aqua"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-            </button>
-          ))}
+          {navItems.map((item) => {
+            const active = location.pathname === item.path;
+            return (
+              <button
+                key={item.path}
+                onClick={() => goTo(item.path)}
+                className={`relative capitalize transition duration-300 pb-1 ${
+                  active ? "text-aqua" : "hover:text-aqua"
+                }`}
+              >
+                {item.label}
+                {active && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute left-0 bottom-0 h-[2px] w-full bg-aqua"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </button>
+            );
+          })}
 
           {/* زر الثيم */}
           <button
@@ -187,22 +156,28 @@ function Navbar({ darkMode, setDarkMode }) {
           >
             <div className="px-6 py-6 space-y-5 text-navy dark:text-white">
               <button
-                onClick={() => scrollToSection("home")}
-                className="block w-full text-right hover:text-aqua"
+                onClick={() => goTo("/")}
+                className={`block w-full text-right hover:text-aqua ${
+                  location.pathname === "/" ? "text-aqua font-bold" : ""
+                }`}
               >
                 الرئيسية
               </button>
 
               <button
-                onClick={() => scrollToSection("services")}
-                className="block w-full text-right hover:text-aqua"
+                onClick={() => goTo("/services")}
+                className={`block w-full text-right hover:text-aqua ${
+                  location.pathname === "/services" ? "text-aqua font-bold" : ""
+                }`}
               >
                 خدماتنا
               </button>
 
               <button
-                onClick={() => scrollToSection("contact")}
-                className="block w-full text-right hover:text-aqua"
+                onClick={() => goTo("/contact")}
+                className={`block w-full text-right hover:text-aqua ${
+                  location.pathname === "/contact" ? "text-aqua font-bold" : ""
+                }`}
               >
                 تواصل معنا
               </button>
