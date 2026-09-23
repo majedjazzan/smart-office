@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+import ScrollToTop from "./components/ScrollToTop";
 import SolarConsult from "./components/SolarConsult";
 
 // الصفحات الرئيسية (كل وحدة أصبحت مستقلة براوت خاص فيها)
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="bg-gradient-to-b from-white via-blue-50 to-white dark:from-[#0B1120] dark:via-[#111827] dark:to-[#0F172A] text-onyx dark:text-white min-h-screen transition-all duration-500">
         {/* ثابت بكل الصفحات */}
         <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />

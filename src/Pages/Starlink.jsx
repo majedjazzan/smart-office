@@ -1,10 +1,31 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Satellite, Wifi, Check } from "lucide-react";
+import Reveal from "../components/Reveal";
 
 function Starlink() {
-  const [service, setService] = useState("Starlink");
+  const [service, setService] = useState("");
   const [packageType, setPackageType] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+
+  const services = [
+    { label: "Starlink", icon: Satellite },
+    { label: "ADSL", icon: Wifi },
+  ];
+
+  const packagesMap = {
+    Starlink: ["Standard", "Mini"],
+    ADSL: ["Viber", "Public"],
+  };
+
+  const step = !service ? 1 : !packageType ? 2 : 3;
+
+  const stepsMeta = [
+    { n: 1, label: "اختر الخدمة" },
+    { n: 2, label: "اختر الباقة" },
+    { n: 3, label: "بياناتك" },
+  ];
 
   const handleSubmit = () => {
     const message = `
@@ -14,7 +35,7 @@ function Starlink() {
 الباقة: ${packageType}
 الاسم: ${name}
 رقم التواصل: ${phone}
-`;
+    `;
 
     const url = `https://wa.me/963937192778?text=${encodeURIComponent(
       message,
@@ -23,96 +44,196 @@ function Starlink() {
     window.open(url, "_blank");
   };
 
-  const packages =
-    service === "Starlink" ? ["Standard", "Mini"] : ["Viber", "Public"];
-
   return (
-    <div className="min-h-screen pt-56 pb-24 px-6 bg-gradient-to-b from-white to-blue-50 text-center">
-      <div className="max-w-5xl mx-auto space-y-12 animate-fadeIn">
-        <div className="space-y-4">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-navy">
+    <div className="min-h-screen pt-40 pb-24 px-6 bg-gradient-to-b from-white to-blue-50 dark:from-[#0B1120] dark:to-[#111827]">
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Header */}
+        <Reveal>
+          <h1 className="text-4xl md:text-5xl font-bold text-navy dark:text-white mb-3">
             اختر خدمة الإنترنت
           </h1>
-
-          <p className="text-gray-600 text-lg">
-            اختر نوع الخدمة والباقه المناسبة، ثم أرسل الطلب مباشرة عبر واتساب
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="text-gray-500 dark:text-gray-300 text-lg mb-12">
+            اختر نوع الخدمة والباقة المناسبة، وبنجهزلك الطلب مباشرة عبر واتساب
           </p>
-        </div>
+        </Reveal>
 
-        <div className="flex justify-center gap-5">
-          <button
-            onClick={() => {
-              setService("Starlink");
-              setPackageType("");
-            }}
-            className={`px-10 py-4 rounded-2xl font-bold transition-all duration-300 shadow-md hover:-translate-y-1 ${
-              service === "Starlink"
-                ? "bg-blue-600 text-white scale-105"
-                : "bg-white text-navy hover:bg-gray-100"
-            }`}
-          >
-            Starlink
-          </button>
-
-          <button
-            onClick={() => {
-              setService("ADSL");
-              setPackageType("");
-            }}
-            className={`px-10 py-4 rounded-2xl font-bold transition-all duration-300 shadow-md hover:-translate-y-1 ${
-              service === "ADSL"
-                ? "bg-blue-600 text-white scale-105"
-                : "bg-white text-navy hover:bg-gray-100"
-            }`}
-          >
-            ADSL
-          </button>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {packages.map((pkg, i) => (
-            <div
-              key={i}
-              onClick={() => setPackageType(pkg)}
-              className={`cursor-pointer p-10 rounded-3xl border bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-                packageType === pkg
-                  ? "border-blue-600 bg-blue-50 shadow-2xl scale-105"
-                  : "border-gray-200 shadow-md"
-              }`}
-            >
-              <h2 className="text-3xl font-extrabold text-navy">{pkg}</h2>
-
-              <p className="text-gray-500 mt-4">اضغط لاختيار هذه الباقة</p>
+        {/* مؤشر الخطوات */}
+        <div className="flex items-center justify-center gap-2 md:gap-3 mb-14">
+          {stepsMeta.map((s, i) => (
+            <div key={s.n} className="flex items-center gap-2 md:gap-3">
+              <div className="flex flex-col items-center gap-2">
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition
+                  ${
+                    step === s.n
+                      ? "bg-gradient-to-r from-steel to-aqua text-white shadow-lg scale-110"
+                      : step > s.n
+                        ? "bg-aqua/20 text-aqua"
+                        : "bg-gray-200 dark:bg-white/10 text-gray-400 dark:text-gray-500"
+                  }`}
+                >
+                  {step > s.n ? <Check size={18} /> : s.n}
+                </div>
+                <span
+                  className={`text-xs font-medium hidden sm:block ${
+                    step === s.n
+                      ? "text-navy dark:text-white"
+                      : "text-gray-400 dark:text-gray-500"
+                  }`}
+                >
+                  {s.label}
+                </span>
+              </div>
+              {i < stepsMeta.length - 1 && (
+                <div
+                  className={`w-10 md:w-20 h-[2px] transition ${
+                    step > s.n ? "bg-aqua" : "bg-gray-200 dark:bg-white/10"
+                  }`}
+                />
+              )}
             </div>
           ))}
         </div>
 
-        {packageType && (
-          <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-xl mx-auto space-y-5 animate-slideUp">
-            <h2 className="text-2xl font-bold text-navy">بيانات الطلب</h2>
-
-            <input
-              type="text"
-              placeholder="الاسم"
-              className="w-full border border-gray-300 p-4 rounded-xl text-right focus:outline-none focus:border-blue-500"
-              onChange={(e) => setName(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="رقم التواصل"
-              className="w-full border border-gray-300 p-4 rounded-xl text-right focus:outline-none focus:border-blue-500"
-              onChange={(e) => setPhone(e.target.value)}
-            />
-
-            <button
-              onClick={handleSubmit}
-              className="w-full bg-green-500 text-white py-4 rounded-xl font-bold hover:bg-green-600 hover:scale-105 transition-all duration-300"
+        <AnimatePresence mode="wait">
+          {/* الخطوة ١: اختيار الخدمة */}
+          {step === 1 && (
+            <motion.div
+              key="step1"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: [0.22, 0.65, 0.3, 1] }}
+              className="grid sm:grid-cols-2 gap-6 max-w-xl mx-auto"
             >
-              تنفيذ الطلب عبر واتساب
-            </button>
-          </div>
-        )}
+              {services.map(({ label, icon: Icon }) => (
+                <button
+                  key={label}
+                  onClick={() => {
+                    setService(label);
+                    setPackageType("");
+                  }}
+                  className="group p-8 rounded-2xl border border-gray-200 dark:border-white/10
+                  bg-white dark:bg-white/5 hover:border-aqua hover:shadow-xl transition text-center"
+                >
+                  <div
+                    className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-blue-50 dark:bg-white/10
+                    flex items-center justify-center group-hover:bg-gradient-to-br
+                    group-hover:from-steel group-hover:to-aqua transition"
+                  >
+                    <Icon
+                      size={28}
+                      className="text-steel dark:text-aqua group-hover:text-white transition"
+                    />
+                  </div>
+                  <h3 className="font-bold text-navy dark:text-white text-lg">
+                    {label}
+                  </h3>
+                </button>
+              ))}
+            </motion.div>
+          )}
+
+          {/* الخطوة ٢: الباقة */}
+          {step === 2 && (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: [0.22, 0.65, 0.3, 1] }}
+            >
+              <button
+                onClick={() => setService("")}
+                className="text-sm text-aqua hover:underline mb-6"
+              >
+                ← رجوع لاختيار الخدمة
+              </button>
+
+              <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+                {packagesMap[service].map((pkg) => (
+                  <div
+                    key={pkg}
+                    onClick={() => setPackageType(pkg)}
+                    className="cursor-pointer p-10 rounded-3xl border bg-white dark:bg-white/5
+                    border-gray-200 dark:border-white/10 hover:border-aqua hover:shadow-xl
+                    transition text-center"
+                  >
+                    <h2 className="text-3xl font-extrabold text-navy dark:text-white">
+                      {pkg}
+                    </h2>
+                    <p className="text-gray-500 dark:text-gray-400 mt-4">
+                      اضغط لاختيار هذه الباقة
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* الخطوة ٣: بيانات التواصل */}
+          {step === 3 && (
+            <motion.div
+              key="step3"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: [0.22, 0.65, 0.3, 1] }}
+              className="max-w-xl mx-auto"
+            >
+              <button
+                onClick={() => setPackageType("")}
+                className="text-sm text-aqua hover:underline mb-6"
+              >
+                ← رجوع لاختيار الباقة
+              </button>
+
+              {/* ملخص الطلب */}
+              <div
+                className="bg-blue-50 dark:bg-white/5 border border-aqua/30 dark:border-white/10
+                rounded-xl px-5 py-3 mb-6 text-sm text-navy dark:text-white"
+              >
+                طلبك: <span className="font-bold">{service}</span> —{" "}
+                <span className="font-bold">{packageType}</span>
+              </div>
+
+              <div
+                className="bg-white dark:bg-white/5 p-8 rounded-2xl shadow-xl border
+                border-gray-100 dark:border-white/10 space-y-4 text-right"
+              >
+                <input
+                  type="text"
+                  placeholder="الاسم"
+                  className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5
+                  text-navy dark:text-white placeholder:text-gray-400 p-3 rounded-lg
+                  focus:outline-none focus:ring-2 focus:ring-aqua transition"
+                  onChange={(e) => setName(e.target.value)}
+                />
+
+                <input
+                  type="text"
+                  placeholder="رقم التواصل"
+                  className="w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5
+                  text-navy dark:text-white placeholder:text-gray-400 p-3 rounded-lg
+                  focus:outline-none focus:ring-2 focus:ring-aqua transition"
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleSubmit}
+                  className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg
+                  transition font-semibold"
+                >
+                  تنفيذ الطلب عبر واتساب
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
