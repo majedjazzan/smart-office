@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import WhatsAppButton from "./components/WhatsAppButton";
 import SolarConsult from "./components/SolarConsult";
 
 // الصفحات الرئيسية (كل وحدة أصبحت مستقلة براوت خاص فيها)
@@ -56,6 +57,7 @@ function App() {
         </Routes>
 
         <Footer />
+        <WhatsAppButton />
       </div>
     </BrowserRouter>
   );
