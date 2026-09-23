@@ -7,12 +7,12 @@ function ProcessSteps() {
     {
       icon: <PhoneCall size={26} className="text-aqua" />,
       title: "تواصل واستشارة",
-      desc: "نسمع احتياجك ونحدد أفضل حل هندسي مناسب لمكتبك أو مشروعك.",
+      desc: "نسمع احتياجك ونحدد أفضل حل هندسي مناسب لمكتبك أو مشروعك",
     },
     {
       icon: <ClipboardList size={26} className="text-steel" />,
       title: "تصميم ودراسة",
-      desc: "نجهز خطة فنية ومخطط تنفيذ واضح قبل البدء بأي عمل.",
+      desc: "نجهز خطة فنية ومخطط تنفيذ واضح قبل البدء بأي عمل",
     },
     {
       icon: <Wrench size={26} className="text-navy dark:text-white" />,
@@ -22,7 +22,7 @@ function ProcessSteps() {
     {
       icon: <LifeBuoy size={26} className="text-aqua" />,
       title: "دعم ومتابعة",
-      desc: "نستمر بمتابعة الأنظمة وصيانتها بعد التسليم مباشرة.",
+      desc: "نستمر بمتابعة الأنظمة وصيانتها بعد التسليم مباشرة",
     },
   ];
 

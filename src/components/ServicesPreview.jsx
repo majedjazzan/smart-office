@@ -8,25 +8,25 @@ function ServicesPreview() {
     {
       icon: <Sun size={30} className="text-white" />,
       title: "Solar Energy",
-      desc: "أنظمة طاقة شمسية ذكية من الاستشارة للتنفيذ الكامل.",
+      desc: "أنظمة طاقة شمسية ذكية من الاستشارة للتنفيذ الكامل",
       color: "from-amber-400 to-orange-500",
     },
     {
       icon: <Satellite size={30} className="text-white" />,
       title: "Starlink",
-      desc: "إنترنت فضائي سريع ومستقر بكل مكان.",
+      desc: "إنترنت فضائي سريع ومستقر بكل مكان",
       color: "from-aqua to-steel",
     },
     {
       icon: <Camera size={30} className="text-white" />,
       title: "Surveillance",
-      desc: "أنظمة مراقبة وإنذار حديثة لحماية مكتبك.",
+      desc: "أنظمة مراقبة وإنذار حديثة لحماية مكتبك",
       color: "from-navy to-slate-700",
     },
     {
       icon: <Code2 size={30} className="text-white" />,
       title: "Software",
-      desc: "أنظمة برمجية متكاملة تناسب أعمالك.",
+      desc: "أنظمة برمجية متكاملة تناسب أعمالك",
       color: "from-steel to-aqua",
     },
   ];

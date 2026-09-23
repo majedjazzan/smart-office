@@ -19,7 +19,7 @@ function Projects() {
                 مشروع الطاقة الشمسية
               </h3>
               <p className="text-gray-600 text-sm">
-                تركيب نظام طاقة شمسية كامل لمنزل أو شركة.
+                تركيب نظام طاقة شمسية كامل لمنزل أو شركة
               </p>
             </div>
           </div>
@@ -36,7 +36,7 @@ function Projects() {
                 مشروع الإنترنت الفضائي
               </h3>
               <p className="text-gray-600 text-sm">
-                تغطية إنترنت عالي السرعة لأماكن نائية.
+                تغطية إنترنت عالي السرعة لأماكن نائية
               </p>
             </div>
           </div>
@@ -51,7 +51,7 @@ function Projects() {
             <div className="p-4">
               <h3 className="text-lg font-semibold mb-2">أنظمة البطاريات</h3>
               <p className="text-gray-600 text-sm">
-                تركيب وصيانة أنظمة تخزين الطاقة لضمان استمرارية التشغيل.
+                تركيب وصيانة أنظمة تخزين الطاقة لضمان استمرارية التشغيل
               </p>
             </div>
           </div>

@@ -7,22 +7,22 @@ function WhyUs() {
     {
       icon: <Zap className="text-aqua" size={28} />,
       title: "Fast Deployment",
-      desc: "من الاستشارة إلى التنفيذ الكامل بأسرع وقت ممكن، بدون تعقيد.",
+      desc: "من الاستشارة إلى التنفيذ الكامل بأسرع وقت ممكن، بدون تعقيد",
     },
     {
       icon: <ShieldCheck className="text-steel" size={28} />,
       title: "Reliable Engineering",
-      desc: "حلول مبنية على معايير هندسية دقيقة وأجهزة موثوقة عالمياً.",
+      desc: "حلول مبنية على معايير هندسية دقيقة وأجهزة موثوقة عالمياً",
     },
     {
       icon: <Wifi className="text-navy dark:text-white" size={28} />,
       title: "Integrated Systems",
-      desc: "طاقة، مراقبة، إنترنت، وبرمجيات تعمل معاً كمنظومة ذكية واحدة.",
+      desc: "طاقة، مراقبة، إنترنت، وبرمجيات تعمل معاً كمنظومة ذكية واحدة",
     },
     {
       icon: <Headphones className="text-aqua" size={28} />,
       title: "Ongoing Support",
-      desc: "متابعة وصيانة مستمرة للأنظمة بعد التسليم مباشرة.",
+      desc: "متابعة وصيانة مستمرة للأنظمة بعد التسليم مباشرة",
     },
   ];
 
@@ -37,8 +37,8 @@ function WhyUs() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-4 text-gray-500 dark:text-gray-300 text-lg max-w-2xl mx-auto">
-              مش بس تركيب أجهزة — رؤية هندسية متكاملة تخدم مكتبك أو مشروعك من
-              أول استشارة لحد آخر صيانة.
+              لأننا نملك رؤية هندسية متكاملة تخدم مكتبك أو مشروعك من أول استشارة
+              لآخر صيانة
             </p>
           </Reveal>
         </div>
