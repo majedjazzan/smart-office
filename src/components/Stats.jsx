@@ -1,11 +1,26 @@
 import Reveal from "./Reveal";
+import { useLanguage } from "../context/LanguageContext";
 
 function Stats() {
+  const { t } = useLanguage();
+
   const stats = [
-    { value: "+120", label: "مشروع منفذ" },
-    { value: "+80", label: "عميل راضٍ" },
-    { value: "24/7", label: "دعم فني" },
-    { value: "+5", label: "سنوات خبرة" },
+    {
+      value: "+120",
+      label: t("home.stats.projects"),
+    },
+    {
+      value: "+180",
+      label: t("home.stats.clients"),
+    },
+    {
+      value: "24/7",
+      label: t("home.stats.support"),
+    },
+    {
+      value: "+5",
+      label: t("home.stats.experience"),
+    },
   ];
 
   return (
@@ -13,16 +28,18 @@ function Stats() {
       <div className="max-w-7xl mx-auto px-8">
         <Reveal>
           <div
-            className="rounded-3xl bg-gradient-to-r from-navy to-steel text-white
-            grid grid-cols-2 md:grid-cols-4 gap-8 px-10 py-14 shadow-2xl"
+            className="rounded-3xl bg-gradient-to-r from-navy to-steel
+            text-white grid grid-cols-2 md:grid-cols-4
+            gap-8 px-10 py-14 shadow-2xl"
           >
-            {stats.map((s, i) => (
-              <div key={i} className="text-center">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center">
                 <p className="text-4xl md:text-5xl font-extrabold text-aqua">
-                  {s.value}
+                  {stat.value}
                 </p>
+
                 <p className="mt-2 text-white/80 text-sm md:text-base">
-                  {s.label}
+                  {stat.label}
                 </p>
               </div>
             ))}

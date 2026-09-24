@@ -7,7 +7,7 @@ import WhatsAppButton from "./components/WhatsAppButton";
 import ScrollToTop from "./components/ScrollToTop";
 import SolarConsult from "./components/SolarConsult";
 
-// الصفحات الرئيسية (كل وحدة أصبحت مستقلة براوت خاص فيها)
+// الصفحات الرئيسية
 import Home from "./components/Home";
 import Services from "./components/Services";
 import Contact from "./components/Contact";
@@ -17,6 +17,8 @@ import Solar from "./Pages/Solar";
 import Starlink from "./Pages/Starlink";
 import Software from "./Pages/Software";
 import Surveillance from "./Pages/Surveillance";
+
+import { LanguageProvider } from "./context/LanguageContext";
 
 function App() {
   const [darkMode, setDarkMode] = useState(
@@ -34,34 +36,30 @@ function App() {
   }, [darkMode]);
 
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <div className="bg-gradient-to-b from-white via-blue-50 to-white dark:from-[#0B1120] dark:via-[#111827] dark:to-[#0F172A] text-onyx dark:text-white min-h-screen transition-all duration-500">
-        {/* ثابت بكل الصفحات */}
-        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+    <LanguageProvider>
+      <BrowserRouter>
+        <ScrollToTop />
 
-        <Routes>
-          {/* الصفحة الرئيسية: Hero + قسم تعريفي (WhyUs) */}
-          <Route path="/" element={<Home />} />
+        <div className="bg-gradient-to-b from-white via-blue-50 to-white dark:from-[#0B1120] dark:via-[#111827] dark:to-[#0F172A] text-onyx dark:text-white min-h-screen transition-all duration-500">
+          <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
-          {/* صفحة الخدمات المستقلة */}
-          <Route path="/services" element={<Services />} />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
 
-          {/* صفحة التواصل المستقلة */}
-          <Route path="/contact" element={<Contact />} />
+            <Route path="/camera" element={<Surveillance />} />
+            <Route path="/solar-consult" element={<SolarConsult />} />
+            <Route path="/solar" element={<Solar />} />
+            <Route path="/starlink" element={<Starlink />} />
+            <Route path="/software" element={<Software />} />
+          </Routes>
 
-          <Route path="/camera" element={<Surveillance />} />
-          <Route path="/solar-consult" element={<SolarConsult />} />
-
-          <Route path="/solar" element={<Solar />} />
-          <Route path="/starlink" element={<Starlink />} />
-          <Route path="/software" element={<Software />} />
-        </Routes>
-
-        <Footer />
-        <WhatsAppButton />
-      </div>
-    </BrowserRouter>
+          <Footer />
+          <WhatsAppButton />
+        </div>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }
 

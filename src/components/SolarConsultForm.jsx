@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useLanguage } from "../context/LanguageContext";
 
 function SolarConsultForm() {
+  const { t } = useLanguage();
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -11,11 +14,11 @@ function SolarConsultForm() {
     e.preventDefault();
 
     const message = `
-طلب استشارة طاقة شمسية
+${t("solarConsult.whatsapp.title")}
 
-الاسم: ${form.name}
-رقم التواصل: ${form.phone}
-    `;
+${t("solarConsult.whatsapp.name")}: ${form.name}
+${t("solarConsult.whatsapp.phone")}: ${form.phone}
+`;
 
     const url = `https://wa.me/963937192778?text=${encodeURIComponent(
       message,
@@ -26,7 +29,7 @@ function SolarConsultForm() {
 
   const inputClass =
     "w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 " +
-    "text-navy dark:text-white placeholder:text-gray-400 p-3 rounded-lg text-right " +
+    "text-navy dark:text-white placeholder:text-gray-400 p-3 rounded-lg text-start " +
     "focus:outline-none focus:ring-2 focus:ring-aqua transition";
 
   return (
@@ -36,23 +39,35 @@ function SolarConsultForm() {
       border border-gray-100 dark:border-white/10"
     >
       <h2 className="text-xl font-bold text-center text-navy dark:text-white">
-        طلب استشارة
+        {t("solarConsult.form.title")}
       </h2>
 
       <input
         type="text"
         required
-        placeholder="الاسم"
+        value={form.name}
+        placeholder={t("solarConsult.form.name")}
         className={inputClass}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
+        onChange={(e) =>
+          setForm((current) => ({
+            ...current,
+            name: e.target.value,
+          }))
+        }
       />
 
       <input
-        type="text"
+        type="tel"
         required
-        placeholder="رقم التواصل"
+        value={form.phone}
+        placeholder={t("solarConsult.form.phone")}
         className={inputClass}
-        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+        onChange={(e) =>
+          setForm((current) => ({
+            ...current,
+            phone: e.target.value,
+          }))
+        }
       />
 
       <motion.button
@@ -62,7 +77,7 @@ function SolarConsultForm() {
         className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg
         font-semibold transition"
       >
-        إرسال عبر واتساب
+        {t("solarConsult.form.send")}
       </motion.button>
     </form>
   );

@@ -77,3 +77,23 @@ html {
 .animate-fadeIn {
     animation: fadeIn 1.2s ease forwards;
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+html[dir="rtl"] {
+    direction: rtl;
+}
+
+html[dir="ltr"] {
+    direction: ltr;
+}
+
+html[dir="rtl"] body {
+    direction: rtl;
+}
+
+html[dir="ltr"] body {
+    direction: ltr;
+}

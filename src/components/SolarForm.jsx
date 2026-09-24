@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Factory, Sprout, Stethoscope, Home } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 function SolarForm() {
+  const { t } = useLanguage();
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -10,11 +13,30 @@ function SolarForm() {
   });
 
   const usageTypes = [
-    { label: "صناعي", icon: Factory },
-    { label: "زراعي", icon: Sprout },
-    { label: "طبي", icon: Stethoscope },
-    { label: "منزلي", icon: Home },
+    {
+      id: "industrial",
+      label: t("servicePages.solar.form.types.industrial"),
+      icon: Factory,
+    },
+    {
+      id: "agricultural",
+      label: t("servicePages.solar.form.types.agricultural"),
+      icon: Sprout,
+    },
+    {
+      id: "medical",
+      label: t("servicePages.solar.form.types.medical"),
+      icon: Stethoscope,
+    },
+    {
+      id: "residential",
+      label: t("servicePages.solar.form.types.residential"),
+      icon: Home,
+    },
   ];
+
+  const selectedType =
+    usageTypes.find((item) => item.id === form.type)?.label || "";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,11 +44,11 @@ function SolarForm() {
     if (!form.type) return;
 
     const message = `
-أريد تركيب منظومة طاقة شمسية
+${t("servicePages.solar.form.whatsapp.title")}
 
-الاسم الثلاثي: ${form.name}
-رقم التواصل: ${form.phone}
-نوع الاستخدام: ${form.type}
+${t("servicePages.solar.form.whatsapp.name")}: ${form.name}
+${t("servicePages.solar.form.whatsapp.phone")}: ${form.phone}
+${t("servicePages.solar.form.whatsapp.usageType")}: ${selectedType}
 `;
 
     const whatsappUrl = `https://wa.me/963937192778?text=${encodeURIComponent(
@@ -38,7 +60,7 @@ function SolarForm() {
 
   const inputClass =
     "w-full border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 " +
-    "text-navy dark:text-white placeholder:text-gray-400 rounded-xl p-4 text-right " +
+    "text-navy dark:text-white placeholder:text-gray-400 rounded-xl p-4 text-start " +
     "focus:outline-none focus:ring-2 focus:ring-aqua transition";
 
   return (
@@ -48,25 +70,30 @@ function SolarForm() {
       border border-gray-100 dark:border-white/10"
     >
       <h2 className="text-2xl font-bold text-center text-navy dark:text-white">
-        تنفيذ طلب طاقة شمسية
+        {t("servicePages.solar.form.title")}
       </h2>
 
-      {/* نوع الاستخدام */}
       <div>
-        <p className="text-sm font-semibold text-navy dark:text-white mb-3 text-right">
-          نوع الاستخدام
+        <p className="text-sm font-semibold text-navy dark:text-white mb-3 text-start">
+          {t("servicePages.solar.form.usageType")}
         </p>
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {usageTypes.map(({ label, icon: Icon }) => (
+          {usageTypes.map(({ id, label, icon: Icon }) => (
             <motion.button
-              key={label}
+              key={id}
               type="button"
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.96 }}
-              onClick={() => setForm({ ...form, type: label })}
+              onClick={() =>
+                setForm((current) => ({
+                  ...current,
+                  type: id,
+                }))
+              }
               className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition
               ${
-                form.type === label
+                form.type === id
                   ? "border-aqua bg-blue-50 dark:bg-white/10 shadow-md"
                   : "border-gray-200 dark:border-white/10 bg-white dark:bg-transparent"
               }`}
@@ -74,11 +101,12 @@ function SolarForm() {
               <Icon
                 size={22}
                 className={
-                  form.type === label
+                  form.type === id
                     ? "text-aqua"
                     : "text-gray-400 dark:text-gray-400"
                 }
               />
+
               <span className="text-xs font-semibold text-navy dark:text-white">
                 {label}
               </span>
@@ -90,17 +118,29 @@ function SolarForm() {
       <input
         type="text"
         required
-        placeholder="الاسم الثلاثي"
+        value={form.name}
+        placeholder={t("servicePages.solar.form.fullName")}
         className={inputClass}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
+        onChange={(e) =>
+          setForm((current) => ({
+            ...current,
+            name: e.target.value,
+          }))
+        }
       />
 
       <input
         type="tel"
         required
-        placeholder="رقم التواصل"
+        value={form.phone}
+        placeholder={t("servicePages.solar.form.phone")}
         className={inputClass}
-        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+        onChange={(e) =>
+          setForm((current) => ({
+            ...current,
+            phone: e.target.value,
+          }))
+        }
       />
 
       <motion.button
@@ -110,7 +150,7 @@ function SolarForm() {
         className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl
         font-bold transition"
       >
-        تنفيذ الطلب عبر واتساب
+        {t("servicePages.solar.form.submit")}
       </motion.button>
     </form>
   );

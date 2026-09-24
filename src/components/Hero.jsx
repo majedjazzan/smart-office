@@ -6,24 +6,31 @@ import {
   useTransform,
   useReducedMotion,
 } from "framer-motion";
+
 import heroImage from "../assets/hero-ai-energy.png";
+import { useLanguage } from "../context/LanguageContext";
 
 function Hero() {
   const ref = useRef(null);
   const reduce = useReducedMotion();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
-  // Parallax: الصورة تتحرك أبطأ من الصفحة، والنص يخف تدريجياً وانت نازل
+  // Parallax: الصورة تتحرك أبطأ من الصفحة
+  // والنص يخف تدريجياً أثناء النزول
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
+
   const imgY = useTransform(
     scrollYProgress,
     [0, 1],
     ["0%", reduce ? "0%" : "6%"],
   );
+
   const textY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -50]);
+
   const textOpacity = useTransform(
     scrollYProgress,
     [0, 0.7],
@@ -32,18 +39,30 @@ function Hero() {
 
   const container = {
     hidden: {},
-    show: { transition: { staggerChildren: 0.25, delayChildren: 0.2 } },
-  };
-  const line = {
-    hidden: { opacity: 0, y: 26 },
     show: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 1.1, ease: [0.22, 0.65, 0.3, 1] },
+      transition: {
+        staggerChildren: 0.25,
+        delayChildren: 0.2,
+      },
     },
   };
 
-  // نقاط لمعان موزعة على كامل مساحة الألواح الشمسية (منطقة تقريبية، قابلة للتعديل)
+  const line = {
+    hidden: {
+      opacity: 0,
+      y: 26,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.1,
+        ease: [0.22, 0.65, 0.3, 1],
+      },
+    },
+  };
+
+  // نقاط لمعان موزعة على منطقة الألواح الشمسية
   const panelGlints = Array.from({ length: 16 }).map((_, i) => ({
     left: `${4 + (i % 8) * 8}%`,
     top: `${55 + Math.floor(i / 8) * 18 + (i % 3) * 6}%`,
@@ -57,21 +76,24 @@ function Hero() {
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* صورة الخلفية مع parallax بدل hover scale */}
+      {/* صورة الخلفية مع Parallax */}
       <motion.img
         src={heroImage}
-        alt="AI & Energy"
-        style={{ objectPosition: "center 20%", y: imgY }}
+        alt={t("home.hero.imageAlt")}
+        style={{
+          objectPosition: "center 20%",
+          y: imgY,
+        }}
         className="absolute inset-0 w-full h-full object-cover scale-105 will-change-transform"
       />
 
-      {/* ===== طبقات الأنيميشن فوق الصورة ===== */}
+      {/* طبقات الأنيميشن فوق الصورة */}
       {!reduce && (
         <div
           className="absolute inset-0 pointer-events-none"
           aria-hidden="true"
         >
-          {/* ١) نبضة ضوء عند عيون الروبوت — يمين الصورة (مؤقتاً أكبر عشان نظبط الموقع بالسكرين شوت) */}
+          {/* نبضة الضوء الأولى */}
           <motion.div
             className="absolute rounded-full bg-cyan-300"
             style={{
@@ -82,9 +104,18 @@ function Hero() {
               filter: "blur(3px)",
               boxShadow: "0 0 22px 8px rgba(103,232,249,0.95)",
             }}
-            animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.25, 1] }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+            animate={{
+              opacity: [0.5, 1, 0.5],
+              scale: [1, 1.25, 1],
+            }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
           />
+
+          {/* نبضة الضوء الثانية */}
           <motion.div
             className="absolute rounded-full bg-cyan-300"
             style={{
@@ -95,7 +126,10 @@ function Hero() {
               filter: "blur(3px)",
               boxShadow: "0 0 20px 7px rgba(103,232,249,0.95)",
             }}
-            animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.25, 1] }}
+            animate={{
+              opacity: [0.5, 1, 0.5],
+              scale: [1, 1.25, 1],
+            }}
             transition={{
               duration: 2.2,
               repeat: Infinity,
@@ -104,7 +138,7 @@ function Hero() {
             }}
           />
 
-          {/* شعاع ضوء ناعم يعبر الشاشة كاملة (الألواح + الروبوت) بدون أي قص — يظهر ويتلاشى تدريجياً */}
+          {/* شعاع ضوء يعبر الشاشة */}
           <motion.div
             className="absolute"
             style={{
@@ -130,7 +164,7 @@ function Hero() {
             }}
           />
 
-          {/* نقاط لمعان موزعة على منطقة الألواح فقط (تبقى محصورة، عكس الشعاع) */}
+          {/* نقاط لمعان الألواح الشمسية */}
           <div
             className="absolute overflow-hidden"
             style={{
@@ -152,7 +186,10 @@ function Hero() {
                   height: p.size,
                   boxShadow: "0 0 10px 3px rgba(253,230,138,0.85)",
                 }}
-                animate={{ opacity: [0, 1, 0], scale: [0.6, 1.2, 0.6] }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  scale: [0.6, 1.2, 0.6],
+                }}
                 transition={{
                   duration: 2.6,
                   repeat: Infinity,
@@ -163,7 +200,7 @@ function Hero() {
             ))}
           </div>
 
-          {/* ٣) خطوط دوائر إلكترونية متوهجة — خلفية الروبوت التقنية، يمين الصورة */}
+          {/* خطوط الدوائر الإلكترونية */}
           <svg
             className="absolute inset-0 w-full h-full"
             viewBox="0 0 100 100"
@@ -181,7 +218,9 @@ function Hero() {
                 stroke="rgba(103,232,249,0.55)"
                 strokeWidth="0.3"
                 strokeDasharray="4 3"
-                animate={{ strokeDashoffset: [0, -14] }}
+                animate={{
+                  strokeDashoffset: [0, -14],
+                }}
                 transition={{
                   duration: 3,
                   repeat: Infinity,
@@ -194,25 +233,37 @@ function Hero() {
         </div>
       )}
 
-      {/* Overlay احترافي */}
-      <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/10 to-transparent dark:from-[#0B1120]/90 dark:via-black/60 dark:to-transparent"></div>
+      {/* Overlay */}
+      <div
+        className="absolute inset-0
+        bg-gradient-to-r
+        from-white/40 via-white/10 to-transparent
+        dark:from-[#0B1120]/90
+        dark:via-black/60
+        dark:to-transparent"
+      />
 
       {/* المحتوى */}
       <motion.div
         variants={container}
         initial={reduce ? false : "hidden"}
         animate="show"
-        style={{ y: textY, opacity: textOpacity }}
+        style={{
+          y: textY,
+          opacity: textOpacity,
+        }}
         className="relative z-10 text-center px-6 max-w-4xl"
       >
         {/* العنوان */}
         <div className="relative inline-block">
-          {/* توهج نابض خلف النص — نفس لون توهج عيون الروبوت */}
+          {/* التوهج خلف Smart Office */}
           {!reduce && (
             <motion.div
               aria-hidden="true"
               className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none select-none"
-              animate={{ opacity: [0.35, 0.75, 0.35] }}
+              animate={{
+                opacity: [0.35, 0.75, 0.35],
+              }}
               transition={{
                 duration: 3.2,
                 repeat: Infinity,
@@ -221,7 +272,9 @@ function Hero() {
             >
               <span
                 className="text-5xl md:text-8xl font-extrabold tracking-tight text-cyan-300"
-                style={{ filter: "blur(26px)" }}
+                style={{
+                  filter: "blur(26px)",
+                }}
               >
                 Smart Office
               </span>
@@ -231,9 +284,9 @@ function Hero() {
           <motion.h1
             variants={line}
             className="text-5xl md:text-8xl font-extrabold
-  text-[#0A2540] dark:text-white
-  drop-shadow-[0_10px_30px_rgba(0,0,0,0.25)]
-  tracking-tight"
+            text-[#0A2540] dark:text-white
+            drop-shadow-[0_10px_30px_rgba(0,0,0,0.25)]
+            tracking-tight"
           >
             Smart Office
           </motion.h1>
@@ -246,7 +299,7 @@ function Hero() {
           text-navy/80 dark:text-gray-200
           leading-relaxed"
         >
-          Smart Engineering Solutions for the Future
+          {t("home.hero.subtitle")}
         </motion.p>
 
         {/* الأزرار */}
@@ -254,31 +307,63 @@ function Hero() {
           variants={line}
           className="mt-12 flex justify-center gap-5 flex-wrap"
         >
+          {/* زر الخدمات */}
           <motion.button
             onClick={() => navigate("/services")}
-            whileHover={reduce ? {} : { scale: 1.06, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            whileHover={
+              reduce
+                ? {}
+                : {
+                    scale: 1.06,
+                    y: -2,
+                  }
+            }
+            whileTap={{
+              scale: 0.97,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 20,
+            }}
             className="px-10 py-4 rounded-full
             bg-gradient-to-r from-steel to-aqua
             text-white font-semibold shadow-xl"
           >
-            Explore Services
+            {t("home.hero.servicesButton")}
           </motion.button>
 
+          {/* زر التواصل */}
           <motion.button
             onClick={() => navigate("/contact")}
-            whileHover={reduce ? {} : { scale: 1.06, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="px-10 py-4 rounded-full border-2 border-navy
-            dark:border-white text-navy dark:text-white
-            font-semibold backdrop-blur-md
+            whileHover={
+              reduce
+                ? {}
+                : {
+                    scale: 1.06,
+                    y: -2,
+                  }
+            }
+            whileTap={{
+              scale: 0.97,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 20,
+            }}
+            className="px-10 py-4 rounded-full
+            border-2 border-navy
+            dark:border-white
+            text-navy dark:text-white
+            font-semibold
+            backdrop-blur-md
             hover:bg-navy hover:text-white
-            dark:hover:bg-white dark:hover:text-navy
+            dark:hover:bg-white
+            dark:hover:text-navy
             transition duration-300"
           >
-            Contact Us
+            {t("home.hero.contactButton")}
           </motion.button>
         </motion.div>
       </motion.div>
